@@ -18,6 +18,7 @@ ax1.xaxis.set_major_locator(MultipleLocator(speed))
 ax1.yaxis.set_major_locator(MultipleLocator(speed))
 ax1.grid()
 ax1.set_aspect(1)
+ax1.text(0.05,0.9,'$(a)$',transform=ax1.transAxes)
 ax1.legend(ncol=2,loc='upper center',bbox_to_anchor=(0.5,1.2))
 
 time_array = []
@@ -49,6 +50,7 @@ while ((abs(1-total_weight)>=toler) and (iteration<=steps)):
         ax2.axhline(total_weight,color='limegreen',linestyle='--')
         ax2.axhline(0,color='magenta',linestyle='--')
         ax2.set_xlabel('Timesteps')
+        ax2.text(0.02,0.9,'$(b)$',transform=ax2.transAxes)
         ax2.legend(loc='upper center',bbox_to_anchor=(0.5,1.3))
         pl.savefig('question1.png',bbox_inches='tight',dpi=300)
 

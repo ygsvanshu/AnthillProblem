@@ -36,6 +36,7 @@ ax1.xaxis.set_major_locator(MultipleLocator(speed))
 ax1.yaxis.set_major_locator(MultipleLocator(speed))
 ax1.grid()
 ax1.set_aspect(1)
+ax1.text(0.01,0.95,'$(a)$',transform=ax1.transAxes)
 ax1.legend(ncol=2,loc='upper center',bbox_to_anchor=(0.5,1.2))
 
 # pl.show()
@@ -70,7 +71,9 @@ while ((abs(1-total_weight)>=toler) and (iteration<=steps)):
         ax2.axhline(total_time,color='gray',linestyle='--')
         ax2.axhline(total_weight,color='limegreen',linestyle='--')
         ax2.axhline(0,color='magenta',linestyle='--')
+        ax2.set_ylim(ymax=total_time+1)
         ax2.set_xlabel('Timesteps')
+        ax2.text(0.01,0.95,'$(b)$',transform=ax2.transAxes)
         ax2.legend(loc='upper center',bbox_to_anchor=(0.5,1.3))
         pl.savefig('question3.png',bbox_inches='tight',dpi=300)
 
@@ -80,4 +83,15 @@ while ((abs(1-total_weight)>=toler) and (iteration<=steps)):
         print("Iterations = {}".format(iteration))
         print()
 
+    # fff,aaa = pl.subplots(1,1)
+    # aaa.set_aspect(1)
+    # aaa.grid()
+    # aaa.set_xlim(speed*(bounds[0,0]-1),speed*(bounds[0,1]+1))
+    # aaa.set_ylim(speed*(bounds[1,0]-1),speed*(bounds[1,1]+1))
+    # aaa.xaxis.set_major_locator(MultipleLocator(speed))
+    # aaa.yaxis.set_major_locator(MultipleLocator(speed))
+    # plot_polynomial(aaa,polynomial,bounds,speed)
+    # plot_probability(aaa,bounds,probability,speed)
+    # fff.savefig('Q3/{}.png'.format(iteration),dpi=300)
+    # pl.close(fff)
 

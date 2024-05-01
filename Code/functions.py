@@ -156,6 +156,7 @@ def boundary_polynomial(polynomial,speed):
         idx = yroots[:,0]==pos[0]
         dst = np.array([np.min(np.abs(yroots[idx,1] - sta[1]))])
         distance  = np.append(distance,dst,axis=0)
+        # distance  = np.append(distance,np.array([1.0]),axis=0)
     direction = np.append(direction,np.full([positions.shape[0]],'N'),axis=0)
 
     print(boundary.shape,distance.shape,direction.shape)
@@ -170,6 +171,7 @@ def boundary_polynomial(polynomial,speed):
         idx = yroots[:,0]==pos[0]
         dst = np.array([np.min(np.abs(yroots[idx,1] - sta[1]))])
         distance  = np.append(distance,dst,axis=0)
+        # distance  = np.append(distance,np.array([1.0]),axis=0)
     direction = np.append(direction,np.full([positions.shape[0]],'S'),axis=0)
     
     print(boundary.shape,distance.shape,direction.shape)
@@ -184,6 +186,7 @@ def boundary_polynomial(polynomial,speed):
         idx = xroots[:,1]==pos[1]
         dst = np.array([np.min(np.abs(xroots[idx,0] - sta[0]))])
         distance  = np.append(distance,dst,axis=0)
+        # distance  = np.append(distance,np.array([1.0]),axis=0)
     direction = np.append(direction,np.full([positions.shape[0]],'E'),axis=0)
     
     Z1  = np.pad((Z[:,1:]-Z[:,:-1]),((0,0),(0,1)),'constant',constant_values=0) # West
@@ -196,6 +199,7 @@ def boundary_polynomial(polynomial,speed):
         idx = xroots[:,1]==pos[1]
         dst = np.array([np.min(np.abs(xroots[idx,0] - sta[0]))])
         distance  = np.append(distance,dst,axis=0)
+        # distance  = np.append(distance,np.array([1.0]),axis=0)
     direction = np.append(direction,np.full([positions.shape[0]],'W'),axis=0)
 
     return(origin,bounds,probability,boundary,distance,direction)
@@ -280,4 +284,19 @@ def plot_boundary(axs,boundary,distance,direction,speed):
     axs.plot([],[],'b>',label='Crossing East')
     axs.plot([],[],'m<',label='Crossing West')
 
+    return()
+
+def plot_probability(axs,bounds,probability,speed):
+
+    x = speed*np.arange(bounds[0,0],bounds[0,1]+1)
+    y = speed*np.arange(bounds[1,0],bounds[1,1]+1)
+
+    for i,xi in enumerate(x):
+        for j,yj in enumerate(y):
+            p = probability[j,i]
+            q = p.as_integer_ratio()
+            if (p>0): 
+                if (p<1) : axs.text(xi,yj,'{}{}{}{}{}'.format(r'$\frac{',q[0],'}{',q[1],'}$'),horizontalalignment='center',verticalalignment='center')
+                if (p==1): axs.text(xi,yj,'1',horizontalalignment='center',verticalalignment='center')
+            
     return()
