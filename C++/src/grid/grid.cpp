@@ -139,34 +139,53 @@ void Grid::updateExternal(Polynomial boundary, int tstep, double &crossedTime, d
 void Grid::updateInternal(double &internalProb)
 {
 
-    unsigned long int j;
+    unsigned long int indx;
+    unsigned long int tall;
+    unsigned long int wide;
+
     std::vector<GridNode> newNodes;
+  
+    int xmin = 0.0;
+    int xmax = 0.0;
+    int ymin = 0.0;
+    int ymax = 0.0;
+
+    for (unsigned long int i = 0; i < Grid::nodes.size(); i++)
+    {
+        if (Grid::nodes[i].position_x < xmin) {xmin = Grid::nodes[i].position_x;}
+        if (Grid::nodes[i].position_x > xmax) {xmax = Grid::nodes[i].position_x;}
+        if (Grid::nodes[i].position_y < ymin) {ymin = Grid::nodes[i].position_y;}
+        if (Grid::nodes[i].position_y > ymax) {ymax = Grid::nodes[i].position_y;}
+    }
+    
+    tall = ymax - ymin + 1;
+    wide = xmax - xmin + 1;
+
+    for (unsigned long int j = 0; j < tall; j++)
+    {
+        for (unsigned long int i = 0; i < wide; i++)
+        {
+            newNodes.push_back(GridNode(xmin + i, ymin + j, 0.0));
+        }
+    }
+
+    for (unsigned long int i = 0; i < Grid::nodes.size(); i++)
+    {
+        indx = ((Grid::nodes[i].position_y - ymin)*wide) + (Grid::nodes[i].position_x - xmin);
+        newNodes[indx].value += Grid::nodes[i].value;
+    }
+
+    Grid::nodes.clear();
 
     internalProb = 0.0;
-    
-    std::sort(Grid::nodes.begin(), Grid::nodes.end(), compareGridNodes);
-
-    newNodes.reserve(Grid::nodes.size());
-    newNodes.clear();
-    newNodes.push_back(Grid::nodes.front());
-
-    internalProb += Grid::nodes.front().value;
-    
-    j = 0;
-    for (unsigned long int i = 1; i < Grid::nodes.size(); i++)
+    for (unsigned long int i = 0; i < newNodes.size(); i++)
     {
-        if (Grid::nodes[i].isCoincident(Grid::nodes[i-1]))
+        if (newNodes[i].value > 0.0)
         {
-            newNodes[j].value += Grid::nodes[i].value;
+            Grid::nodes.push_back(newNodes[i]);
+            internalProb += newNodes[i].value;
         }
-        else
-        {
-            newNodes.push_back(Grid::nodes[i]);
-            j += 1;
-        }
-        internalProb += Grid::nodes[i].value;
     }
-    Grid::nodes.swap(newNodes);
 }
 
 std::string Grid::writeNodes()
